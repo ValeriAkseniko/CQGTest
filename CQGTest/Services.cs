@@ -1,14 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CQGTest
 {
     public class Services
     {
+        private void HasCorrect(Word word)
+        {
+            List<string> One = new List<string>();
+            List<string> Two = new List<string>();
+            foreach (var item in word.CorrectWords)
+            {
+                if (word.SourceWord.Length == item.Length && HasError(word.SourceWord, item))
+                {
+                    Two.Add(item);
+                }
+                if (HasOneExcessLetter(word.SourceWord, item))
+                {
+                    One.Add(item);
+                }
+            }
+
+            if (One.Count != 0 && Two.Count != 0)
+            {
+                foreach (var item in Two)
+                {
+                    word.CorrectWords.Remove(item);
+                }
+            }
+        }
+
         private bool HasError(string word, string keyWord)
         {
             int countError = 0;
@@ -69,46 +90,20 @@ namespace CQGTest
             {
                 word.CorrectWords.Add(dictionaryWord);
             }
+            if (word.CorrectWords.Count > 1)
+            {
+                HasCorrect(word);
+            }
         }
 
-        public void Execute(List<Word> words)
+        public string TextConverter(List<string> lines)
         {
-            ConnectionServices connectionServices = new ConnectionServices();
-            string path = connectionServices.GetFilePath();
-            string temp;
-            List<string> linesDictionary = new List<string>();
-            List<string> linesText = new List<string>();
-            try
+            string result = string.Empty;
+            foreach (var line in lines)
             {
-                using (StreamReader sr = new StreamReader(path))
-                {
-                    while ((temp = sr.ReadLine()) != null)
-                    {
-                        if (temp == "===")
-                        {
-                            break;
-                        }
-                        linesDictionary.Add(temp);
-                    }
-                    while ((temp = sr.ReadLine()) != null)
-                    {
-                        if (temp == "===")
-                        {
-                            break;
-                        }
-                        linesText.Add(temp);
-                    }
-                }
+                result = result + " " + line;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
-            path = connectionServices.GetDirectoryPath();
-            StringBuilder sb = connectionServices.Print(words, temp); //TODO temp
-            connectionServices.RecordTxtFile(sb, $@"{path}\result.txt");
+            return result;
         }
     }
 }

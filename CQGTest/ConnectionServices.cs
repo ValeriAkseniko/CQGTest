@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace CQGTest
 {
@@ -40,18 +38,24 @@ namespace CQGTest
             }
             return path;
         }
-        public void Execute(List<Word> words)
+        public void Execute()
         {
+            Services service = new Services();
             string path = GetFilePath();
-            string txt;
-            List<string> lines = new List<string>();
+            string blank;
+            List<string> dictionatyLines = new List<string>();
+            List<string> textLines = new List<string>();
             try
             {
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    while ((txt = sr.ReadLine()) != null)
+                    while ((blank = sr.ReadLine()) != "===")
                     {
-                        lines.Add(txt);
+                        dictionatyLines.Add(blank);
+                    }
+                    while ((blank = sr.ReadLine()) != "===")
+                    {
+                        textLines.Add(blank);
                     }
                 }
             }
@@ -60,9 +64,30 @@ namespace CQGTest
                 Console.WriteLine(ex.Message);
                 throw;
             }
+            string[] dictionaryWords = service.TextConverter(dictionatyLines).Split(' ');
+            string[] textWords = service.TextConverter(textLines).Split(' ');
+            List<Word> listWords = new List<Word>();
+            foreach (var word in textWords)
+            {
+                listWords.Add(new Word() { SourceWord = word, IsCorrect = false });
+            }
+            foreach (var word in listWords)
+            {
+                foreach (var dictionaryWord in dictionaryWords)
+                {
+                    if (word.SourceWord == dictionaryWord)
+                    {
+                        word.IsCorrect = true;
+                        break;
+                    }
+                    service.BuildCorrectWords(word, dictionaryWord);
+                }
+            }
 
+            string text = String.Join("\n",textLines);
+
+            StringBuilder sb = Print(listWords, text);
             path = GetDirectoryPath();
-            StringBuilder sb = Print(words,txt);
             RecordTxtFile(sb, $@"{path}\result.txt");
         }
         public void RecordTxtFile(StringBuilder txt, string path)
