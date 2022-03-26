@@ -38,6 +38,31 @@ namespace CQGTest
 
         }
 
+        private static void HasCorrect(Word word)
+        {
+            List<string> One = new List<string>();
+            List<string> Two = new List<string>();
+            foreach (var item in word.CorrectWords)
+            {
+                if (word.SourceWord.Length == item.Length && HasError(word.SourceWord, item))
+                {
+                    Two.Add(item);
+                }
+                if (HasOneExcessLetter(word.SourceWord, item))
+                {
+                    One.Add(item);
+                }
+            }            
+            
+            if (One.Count != 0 && Two.Count != 0)
+            {
+                foreach (var item in Two)
+                {
+                    word.CorrectWords.Remove(item);
+                }                
+            }
+        }
+
         private static bool HasError(string word, string keyWord)
         {
             int countError = 0;
@@ -98,6 +123,10 @@ namespace CQGTest
             {
                 word.CorrectWords.Add(dictionaryWord);
             }
+            if (word.CorrectWords.Count > 1)
+            {
+                HasCorrect(word);
+            }            
         }
 
         public static void Print(List<Word> words, string text)
