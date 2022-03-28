@@ -4,8 +4,8 @@
     {
         static void Main(string[] args)
         {
-            ConnectionServices connectionServices = new ConnectionServices();
-            connectionServices.Execute();
+            Services services = new Services();
+            services.Execute();
         }
     }
 }

@@ -1,10 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace CQGTest
 {
     public class Services
     {
+        public void Execute()
+        {
+            ConnectionServices connectionServices = new ConnectionServices();
+            string path = connectionServices.GetFilePath();
+            string blank;
+            List<string> dictionatyLines = new List<string>();
+            List<string> textLines = new List<string>();
+            try
+            {
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    while ((blank = sr.ReadLine()) != "===")
+                    {
+                        dictionatyLines.Add(blank);
+                    }
+                    while ((blank = sr.ReadLine()) != "===")
+                    {
+                        textLines.Add(blank);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            string[] dictionaryWords = TextConverter(dictionatyLines).Split(' ');
+            string[] textWords = TextConverter(textLines).Split(' ');
+            List<Word> listWords = new List<Word>();
+            foreach (var word in textWords)
+            {
+                listWords.Add(new Word() { SourceWord = word, IsCorrect = false });
+            }
+            foreach (var word in listWords)
+            {
+                foreach (var dictionaryWord in dictionaryWords)
+                {
+                    if (word.SourceWord == dictionaryWord)
+                    {
+                        word.IsCorrect = true;
+                        break;
+                    }
+                    BuildCorrectWords(word, dictionaryWord);
+                }
+            }
+
+            string text = String.Join("\n", textLines);
+
+            StringBuilder sb = connectionServices.Print(listWords, text);
+            path = connectionServices.GetDirectoryPath();
+            connectionServices.RecordTxtFile(sb, $@"{path}\result.txt");
+        }
+
         private void HasCorrect(Word word)
         {
             List<string> One = new List<string>();

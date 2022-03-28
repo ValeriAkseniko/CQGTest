@@ -38,58 +38,7 @@ namespace CQGTest
             }
             return path;
         }
-        public void Execute()
-        {
-            Services service = new Services();
-            string path = GetFilePath();
-            string blank;
-            List<string> dictionatyLines = new List<string>();
-            List<string> textLines = new List<string>();
-            try
-            {
-                using (StreamReader sr = new StreamReader(path))
-                {
-                    while ((blank = sr.ReadLine()) != "===")
-                    {
-                        dictionatyLines.Add(blank);
-                    }
-                    while ((blank = sr.ReadLine()) != "===")
-                    {
-                        textLines.Add(blank);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-            string[] dictionaryWords = service.TextConverter(dictionatyLines).Split(' ');
-            string[] textWords = service.TextConverter(textLines).Split(' ');
-            List<Word> listWords = new List<Word>();
-            foreach (var word in textWords)
-            {
-                listWords.Add(new Word() { SourceWord = word, IsCorrect = false });
-            }
-            foreach (var word in listWords)
-            {
-                foreach (var dictionaryWord in dictionaryWords)
-                {
-                    if (word.SourceWord == dictionaryWord)
-                    {
-                        word.IsCorrect = true;
-                        break;
-                    }
-                    service.BuildCorrectWords(word, dictionaryWord);
-                }
-            }
-
-            string text = String.Join("\n",textLines);
-
-            StringBuilder sb = Print(listWords, text);
-            path = GetDirectoryPath();
-            RecordTxtFile(sb, $@"{path}\result.txt");
-        }
+        
         public void RecordTxtFile(StringBuilder txt, string path)
         {
             try
