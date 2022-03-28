@@ -24,6 +24,7 @@ namespace CQGTest
             }
             return path;
         }
+
         public string GetDirectoryPath()
         {
             Console.WriteLine(Messages.OutputDirectoryPath);

@@ -60,7 +60,7 @@ namespace CQGTest
             connectionServices.RecordTxtFile(sb, $@"{path}\result.txt");
         }
 
-        private void HasCorrect(Word word)
+        public void HasCorrect(Word word)
         {
             List<string> One = new List<string>();
             List<string> Two = new List<string>();
@@ -85,7 +85,7 @@ namespace CQGTest
             }
         }
 
-        private bool HasError(string word, string keyWord)
+        public bool HasError(string word, string keyWord)
         {
             int countError = 0;
             for (int i = 0; i < word.Length && countError < 2; i++)
@@ -114,20 +114,20 @@ namespace CQGTest
             return false;
         }
 
-        private bool HasOneExcessLetter(string word, string word2)
+        public bool HasOneExcessLetter(string firstWord, string secondWord)
         {
-            for (int i = 0; i < word.Length; i++)
+            for (int i = 0; i < firstWord.Length; i++)
             {
-                string testWord = word.Remove(i, 1);
-                if (testWord == word2)
+                string testWord = firstWord.Remove(i, 1);
+                if (testWord == secondWord)
                 {
                     return true;
                 }
             }
-            for (int i = 0; i < word2.Length; i++)
+            for (int i = 0; i < secondWord.Length; i++)
             {
-                string testWord = word2.Remove(i, 1);
-                if (testWord == word)
+                string testWord = secondWord.Remove(i, 1);
+                if (testWord == firstWord)
                 {
                     return true;
                 }
