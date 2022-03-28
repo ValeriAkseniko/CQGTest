@@ -4,7 +4,7 @@ using Xunit;
 
 namespace xUnitTestsProject
 {
-    public class ServiceTests
+    public class ProcessingTextServiceTest
     {
         [Fact]
         public void TextConvertorTest()
@@ -26,7 +26,7 @@ namespace xUnitTestsProject
             };
             string secondString = " How are you?";
 
-            Services service = new Services();
+            ProcessingTextService service = new ProcessingTextService();
             string firtsResult = service.TextConverter(firstList);
             string secondResult = service.TextConverter(secondList);
 
@@ -42,7 +42,7 @@ namespace xUnitTestsProject
         [InlineData("tropic", "tropi")]
         public void HasOneExcessLetterText(string firstWord, string secondWord)
         {
-            Services services = new Services();
+            ProcessingTextService services = new ProcessingTextService();
 
             Assert.True(services.HasOneExcessLetter(firstWord, secondWord));
         }
@@ -54,7 +54,7 @@ namespace xUnitTestsProject
         [InlineData("tropic", "torpic")]
         public void HasErroTest(string firstWord, string secondWord)
         {
-            Services services = new Services();
+            ProcessingTextService services = new ProcessingTextService();
 
             Assert.True(services.HasError(firstWord, secondWord));
         }
@@ -75,7 +75,7 @@ namespace xUnitTestsProject
             };
             Word wordNull = null;
 
-            Services services = new Services();
+            ProcessingTextService services = new ProcessingTextService();
             try
             {
                 services.HasCorrect(word);
@@ -108,7 +108,7 @@ namespace xUnitTestsProject
             string dictionary = "rain";
             string dictionaryNull = null;
 
-            Services services = new Services();
+            ProcessingTextService services = new ProcessingTextService();
 
             try
             {

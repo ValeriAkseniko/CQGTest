@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            Services services = new Services();
+            ProcessingTextService services = new ProcessingTextService();
             services.Execute();
         }
     }

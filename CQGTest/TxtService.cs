@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CQGTest
 {
-    public class ConnectionServices
+    public class TxtService
     {
         public string GetFilePath()
         {
@@ -56,8 +56,9 @@ namespace CQGTest
             }
         }
 
-        public StringBuilder Print(List<Word> words, string text)
+        public StringBuilder GetText(List<Word> words, List<string> textLines)
         {
+            string text = String.Join("\n", textLines);
             var sb = new StringBuilder(text);
 
             foreach (var word in words)
