@@ -2,14 +2,14 @@
 {
     public class Messages
     {
-        public const string InputPath = "Введите полный путь для чтения текстового файла";
+        public const string InputPath = "Enter the full path to read the text file";
 
-        public const string OutputDirectoryPath = "Введите полный путь директории для записи результата";
+        public const string OutputDirectoryPath = "Enter the full path to the directory to write the result";
 
-        public const string InvalidInputPath = "Некорректный путь для чтения";
+        public const string InvalidInputPath = "Wrong read path";
 
-        public const string InvalidOutputPath = "Некорректный путь для записи";
+        public const string InvalidOutputPath = "Wrong write path";
 
-        public const string RecordingCompleted = "Запись выполнена";
+        public const string RecordingCompleted = "Recording done";
     }
 }
