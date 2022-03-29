@@ -1,5 +1,6 @@
 using CQGTest;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace xUnitTestsProject
@@ -64,36 +65,29 @@ namespace xUnitTestsProject
         {
             Word word = new Word()
             {
-                SourceWord = "rain",
+                SourceWord = "lain",
                 IsCorrect = true,
                 CorrectWords = new List<string>()
                 {
-                    "arin",
-                    "lrain",
-                    "ain"
+                    "rain",
+                    "plain",
+                    "pain",
+                    "main"
                 }
             };
-            Word wordNull = null;
+            Word wordCorrect = new Word()
+            {
+                SourceWord = "lain",
+                IsCorrect = true,
+                CorrectWords = new List<string>()
+                {
+                    "plain"
+                }
+            };
 
             ProcessingTextService services = new ProcessingTextService();
-            try
-            {
-                services.HasCorrect(word);
-                Assert.True(true);
-            }
-            catch
-            {
-                Assert.False(false);
-            }
-            try
-            {
-                services.HasCorrect(wordNull);
-                Assert.True(true);
-            }
-            catch
-            {
-                Assert.False(false);
-            }
+            services.HasCorrect(word);
+            Assert.Equal(wordCorrect.CorrectWords, word.CorrectWords);
         }
 
         [Fact]
@@ -101,44 +95,54 @@ namespace xUnitTestsProject
         {
             Word word = new Word()
             {
-                SourceWord = "arin",
-                IsCorrect = true
+                SourceWord = "lain",
+                IsCorrect = false
             };
-            Word wordNull = null;
-            string dictionary = "rain";
-            string dictionaryNull = null;
+            string dictionary = "plain";
 
             ProcessingTextService services = new ProcessingTextService();
 
-            try
-            {
-                services.BuildCorrectWords(word, dictionary);
-                Assert.True(true);
-            }
-            catch
-            {
-                Assert.False(false);
-            }
+            services.BuildCorrectWords(word, dictionary);
 
-            try
-            {
-                services.BuildCorrectWords(word, dictionaryNull);
-                Assert.True(true);
-            }
-            catch
-            {
-                Assert.False(false);
-            }
+            Assert.True(word.CorrectWords.Contains(dictionary));
+        }
 
-            try
+        [Fact]
+        public void ExecuteTest()
+        {
+            List<Word> listWord = new List<Word>()
             {
-                services.BuildCorrectWords(wordNull, dictionary);
-                Assert.True(true);
-            }
-            catch
+                new Word()
+                {
+                    SourceWord = "lain",
+                    IsCorrect = false
+                }
+            };
+            Word wordCorrect = new Word()
             {
-                Assert.False(false);
-            }
+                SourceWord = "lain",
+                IsCorrect = true,
+                CorrectWords = new List<string>()
+                {
+                    "plain"
+                }
+            };
+
+            string[] dictionary = new string[]
+            {
+                    "rain",
+                    "plain",
+                    "pain",
+                    "main",
+                    "kate",
+                    "false"
+            };
+
+            ProcessingTextService service = new ProcessingTextService();
+
+            service.Execute(dictionary, listWord);
+
+            Assert.Equal(wordCorrect.CorrectWords, listWord.First().CorrectWords);
         }
     }
 }
